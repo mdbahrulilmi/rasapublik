@@ -1,26 +1,15 @@
 import streamlit as st
 
-def intro():
-    st.markdown("# RasaPublik — Sentiment Analysis 📢📊  \nBy Muhammad Bahrul Ilmi")
+st.logo("assets/logo.png")
 
-    st.markdown(
-        """
-        **RasaPublik** adalah aplikasi analisis sentimen berbasis web untuk memahami opini masyarakat terhadap topik tertentu, seperti institusi, produk, layanan, atau isu sosial.
+pages = [
+    st.Page("pages/home.py", title="Home Page", icon="🏠"),
+    st.Page("pages/data.py", title="Input Data", icon="📰"),
+    st.Page("pages/preprocessing.py", title="Pra Proses", icon="📝"),
+    st.Page("pages/sentiment.py", title="Analisis Sentimen", icon="👨‍🏫"),
+    st.Page("pages/visualization.py", title="Visualisasi", icon="📺")
+]
 
-        🔍 Anda dapat:
-        - Menginput data dari file, teks langsung, atau hasil scraping
-        - Melakukan pra-pemrosesan otomatis
-        - Melihat hasil analisis sentimen
-        - Menikmati visualisasi interaktif
+pg = st.navigation(pages)
 
-        ### Tentang Aplikasi
-        - Dibuat dengan Python dan Streamlit
-        - Fokus pada opini publik dalam bahasa Indonesia
-        - Mendukung input fleksibel dan visualisasi menarik
-
-        ### Tujuan
-        Memberikan wawasan terhadap bagaimana masyarakat memandang suatu topik atau entitas melalui data digital.
-        """
-    )
-
-intro()
+pg.run()
