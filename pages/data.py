@@ -1,6 +1,6 @@
 import streamlit as st
-from data import inputfile, scrapping, crawling
-def intro():
+from features.data import inputfile, scrapping, crawling
+def main():
     st.markdown("# Input Data 📁")
     st.write(""" 
         Silakan pilih metode pengambilan data melalui menu di sebelah kiri:  
@@ -15,7 +15,7 @@ def intro():
 
 
 collection_method = {
-    '-': intro,
+    '-': main,
     'Input File': inputfile.method,
     'Scrapping': scrapping.method,
     'Crawling': crawling.method

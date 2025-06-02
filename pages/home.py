@@ -1,6 +1,6 @@
 import streamlit as st
 
-def home():
+def main():
     st.markdown("# RasaPublik 📢📊 \nBy Muhammad Bahrul Ilmi")
 
     st.markdown(
@@ -23,4 +23,4 @@ def home():
         """
     )
 
-home()
+main()
