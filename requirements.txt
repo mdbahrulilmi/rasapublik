@@ -1,0 +1,7 @@
+nltk==3.9.1
+emoji==2.14.1
+pandas==2.2.3
+numpy==2.2.6
+streamlit==1.45.1
+regex==2024.11.6
+sastrawi==1.0.1
