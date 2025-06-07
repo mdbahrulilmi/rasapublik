@@ -45,6 +45,19 @@ def main():
 
 main()
 
+@st.dialog("Kasih datamu nama!")
+def nameData(csv):
+    if "filtered_data" in st.session_state:
+        st.write(st.session_state['filtered_data'].shape)
+    name = st.text_input("Nama Dataset")
+    st.download_button(
+        label="Download CSV",
+        data=csv,
+        file_name=f'{name}.csv',
+        mime="text/csv",
+        icon=":material/download:",
+    )
+
 only_data = None
 if "selected_only_data" in st.session_state:
 
@@ -60,10 +73,5 @@ if "selected_only_data" in st.session_state:
         st.write(st.session_state['filtered_data'].shape)
 
     csv = realTimeData.to_csv().encode('utf-8')
-    st.download_button(
-        label="Download CSV",
-        data=csv,
-        file_name="data_filtered.csv",
-        mime="text/csv",
-        icon=":material/download:",
-    )
+    if st.button('Downlaod'):
+        nameData(csv)

@@ -6,14 +6,22 @@ def option():
         data = st.session_state['filtered_data']
     else:
         data = st.session_state['selected_only_data']
+    
+    filtering_basic = st.sidebar.expander(" Bersih Data Ringan",expanded=True)
+    filtering_advanced = st.sidebar.expander("Bersih Data Lanjutan")
 
-    missingvalues_checkbox = st.sidebar.checkbox("Hapus nilai hilang")
-    casefolding_checkbox = st.sidebar.checkbox("Ubah ke huruf kecil")
-    cleansing_checkbox = st.sidebar.checkbox("Hapus karakter khusus")
-    stopwordremoval_checkbox = st.sidebar.checkbox("Hapus kata stopword")
-    convertEmoticon_checkbox = st.sidebar.checkbox("Hapus emotikon")
-    convertNegation_checkbox = st.sidebar.checkbox("Atur negasi")
-    tokenisasi_checkbox = st.sidebar.checkbox("Tokenisasi teks")
+    with filtering_basic:
+        filtering_advanced.expanded == True
+        missingvalues_checkbox = st.checkbox("Hapus nilai hilang")
+        casefolding_checkbox = st.checkbox("Ubah ke huruf kecil")
+        cleansing_checkbox = st.checkbox("Hapus karakter khusus")
+
+    with filtering_advanced:
+        filtering_basic.expanded == False
+        stopwordremoval_checkbox = st.checkbox("Hapus kata stopword")
+        convertEmoticon_checkbox = st.checkbox("Hapus emotikon")
+        convertNegation_checkbox = st.checkbox("Atur negasi")
+        tokenisasi_checkbox = st.checkbox("Tokenisasi teks")
 
 
     if (
