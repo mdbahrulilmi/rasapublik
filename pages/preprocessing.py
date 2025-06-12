@@ -1,21 +1,13 @@
 import streamlit as st
 from features.preprocessing import filter
-
-def collection_data():
-    if "data_collection" in st.session_state and st.session_state.data_collection:
-        dataset_names = [item["name"] for item in st.session_state.data_collection]
-        selected_name = st.selectbox("Pilih Dataset:", dataset_names)
-        selected_data = next(
-            (item["data"] for item in st.session_state.data_collection if item["name"] == selected_name)
-        )
-        return selected_data, selected_name
+from features.data import collection_data, download_data
 
 def main():
     st.markdown("### Pilih dataset")
     selected_data = None
     selected_name = None
 
-    result = collection_data()
+    result = collection_data.method()
     if result:
         selected_data,selected_name = result
 
@@ -39,24 +31,10 @@ def main():
         else:
             if 'selected_only_data' in st.session_state:
                 del st.session_state['selected_only_data']
-
     else:
         st.warning("Belum ada dataset yang disimpan.")
 
 main()
-
-@st.dialog("Kasih datamu nama!")
-def nameData(csv):
-    if "filtered_data" in st.session_state:
-        st.write(st.session_state['filtered_data'].shape)
-    name = st.text_input("Nama Dataset")
-    st.download_button(
-        label="Download CSV",
-        data=csv,
-        file_name=f'{name}.csv',
-        mime="text/csv",
-        icon=":material/download:",
-    )
 
 only_data = None
 if "selected_only_data" in st.session_state:
@@ -71,7 +49,5 @@ if "selected_only_data" in st.session_state:
 
     if "filtered_data" in st.session_state:
         st.write(st.session_state['filtered_data'].shape)
-
-    csv = realTimeData.to_csv().encode('utf-8')
-    if st.button('Downlaod'):
-        nameData(csv)
+        
+    download_data.method(realTimeData)

@@ -8,7 +8,7 @@ def option():
         data = st.session_state['selected_only_data']
     
     filtering_basic = st.sidebar.expander(" Bersih Data Ringan",expanded=True)
-    filtering_advanced = st.sidebar.expander("Bersih Data Lanjutan")
+    filtering_advanced = st.sidebar.expander("Bersih Data Lanjutan")    
 
     with filtering_basic:
         filtering_advanced.expanded == True
