@@ -1,0 +1,17 @@
+{
+    ":)": "senang",
+    ":-)": "senang",
+    ":(": "sedih",
+    ":-(": "sedih",
+    ":D": "senang",
+    ":-D": "senang",
+    ";)": "nakal",
+    ";-)": "nakal",
+    ":/": "bingung",
+    ":'(": "menangis",
+    ":P": "main-main",
+    ">:(": "marah",
+    "XD": "tertawa",
+    ":3": "imut",
+    "<3": "cinta"
+}

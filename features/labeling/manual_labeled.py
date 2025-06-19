@@ -2,7 +2,7 @@ import streamlit as st
 
 def option(data, selected_column):
     new_data_with_labels = []
-
+    
     for i in range(st.session_state['amount']):
         col1, col2 = st.columns([0.7, 0.3], gap="medium",border=True)
         
@@ -17,9 +17,10 @@ def option(data, selected_column):
                 key=f"label_{i}",
                 placeholder=f"Label ke-{i+1}"
             )
+        label = option if option is not None else ""
         new_data_with_labels.append({
             selected_column: data[selected_column].iloc[i],
-            "label": option
+            "label": label
         })
 
     data_labeled = data[[selected_column]].copy()

@@ -1,4 +1,11 @@
-import emoji
+import emoji, re
 
 def option(data):
-    return data.astype(str).applymap(lambda x: emoji.replace_emoji(x, replace=''))
+    with open('emoticon_dict.txt', 'r') as f:
+        emot = dict(line.strip().split(None, 1) for line in f)
+
+    pattern = re.compile('|'.join(map(re.escape, emot)))
+
+    return data.astype(str).applymap(
+        lambda x: pattern.sub(lambda m: emot[m.group()], emoji.replace_emoji(x, replace=''))
+    )
