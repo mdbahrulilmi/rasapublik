@@ -1,7 +1,6 @@
 import streamlit as st
-from features.data import collection_data, download_data
-from features.analysis import svm, xlnet
-
+from features.data import collection_data
+from features.analysis import svm, naivebayes
 
 
 def main():
@@ -16,9 +15,9 @@ def main():
         st.dataframe(selected_data.head())
 
         if st.sidebar.button("Jalankan SVM"):
-            svm.algoritm(selected_data)
+            svm.algoritm(selected_data, "text", "label")
 
-        if st.sidebar.button("Jalankan XLNet"):
-            xlnet.algoritm(selected_data)
+        if st.sidebar.button("Jalankan Naive Bayes"):
+            naivebayes.algoritm(selected_data, "text", "label")
 
 main()

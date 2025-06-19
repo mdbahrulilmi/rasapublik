@@ -16,6 +16,7 @@ def main():
                 with row_col2:
                     if st.button("Delete", key=f"delete_{idx}", use_container_width=True, type="primary"):
                         del st.session_state.data_collection[idx]
+                        st.rerun()
 
     else:
         st.markdown("# Input Data 📁")

@@ -23,7 +23,7 @@ def main():
         st.markdown("### Pilih dataset")
     with col_header2:
         dataset_preview =  st.button("Lihat dataset")
-    col_input1, col_input2, col_input3 = st.columns(3)
+    col_input1, col_input2, col_input3 = st.columns([0.4,0.2,0.4])
     with col_input1:
         result = collection_data.method()
     
@@ -32,14 +32,27 @@ def main():
         with col_input2:
             selected_column = st.selectbox("Pilih Kolom", data.columns, index=1)
         with col_input3:
-            if "amount" not in st.session_state:
-                st.session_state.amount = 0
-            st.text_input(
-                label="Label manual:",
-                value= str(st.session_state.amount),
-                key="amount_input",
-                on_change=update_amount
+            col_amount1, col_amount2, col_amount3 = st.columns(3, vertical_alignment="bottom")
+            with col_amount1:
+                start_index = st.number_input(
+                    "Index awal",
+                    min_value=0,
+                    max_value=len(data)-1,
+                    value=st.session_state.get('start_index', 0)
                 )
+            with col_amount2:
+                amount = st.number_input(
+                    "Jumlah data",
+                    min_value=1,
+                    max_value=len(data)-start_index,
+                    value=st.session_state.get('amount', 10)
+                )
+            with col_amount3:
+                if st.button("Set"):
+                    st.session_state['start_index'] = start_index
+                    st.session_state['amount'] = amount
+                    st.rerun()
+
             
         if data is not None:
             if dataset_preview:
@@ -47,6 +60,7 @@ def main():
                 
         if 'amount' in st.session_state:
                 manual_labeled.option(data, selected_column)
+
     if result is not None:
         data, name = result
         if "data_labeled" in st.session_state:
