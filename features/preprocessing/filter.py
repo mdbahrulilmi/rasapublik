@@ -57,7 +57,7 @@ def option():
         data = cleansing.option(data)
 
     if keywordFiltering_checkbox:
-        data = keyword.option(data,['polisi','polri'],'tweet')
+        data = keyword.option(data,['polisi','polri'],'Tweet')
 
     if convertEmoticon_checkbox:
         data = convert_emoticon.option(data)

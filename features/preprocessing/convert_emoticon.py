@@ -1,8 +1,15 @@
-import emoji, re
+import emoji, re, os
 
 def option(data):
-    with open('emoticon_dict.txt', 'r') as f:
-        emot = dict(line.strip().split(None, 1) for line in f)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    emoticon_path = os.path.join(current_dir, "emoticon_dict.txt")
+    
+    emot = {}
+    with open(emoticon_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            parts = line.strip().split(None, 1)
+            if len(parts) == 2:
+                emot[parts[0]] = parts[1]
 
     pattern = re.compile('|'.join(map(re.escape, emot)))
 
