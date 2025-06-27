@@ -19,5 +19,7 @@ def main():
 
         if st.sidebar.button("Jalankan Naive Bayes"):
             naivebayes.algoritm(selected_data, "text", "label")
+    else:
+        st.warning("Belum ada dataset yang disimpan.")
 
 main()

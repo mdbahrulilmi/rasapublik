@@ -1,13 +1,15 @@
 import streamlit as st
 from features.labeling import rulebased
 
-def option(data):
-    ruleBased_checkbox = st.sidebar.checkbox('Rule Based')
-    petrainedModel_checkbox = st.sidebar.checkbox('Petrained Model')
-    weakSupervision_checkbox = st.sidebar.checkbox('Weak Supervision')
-    if "rulebased" not in st.session_state: 
-        if ruleBased_checkbox is True:
-            rulebased.method(data)
-    if ruleBased_checkbox is False:
-        if "rulebased" in st.session_state:
-            del st.session_state.rulebased
+def option(data,selected_column):
+    st.sidebar.subheader('Label Otomatis')
+    method = st.sidebar.selectbox(
+        'Pilih label otomatis',
+        ("Rule Based Labeling"),
+        label_visibility="collapsed"
+        )
+    submit = st.sidebar.button("Gunakan Metode",type="primary")
+
+    if submit:
+        if method == "Rule Based Labeling":
+            labeled_data = rulebased.method(data, selected_column)
