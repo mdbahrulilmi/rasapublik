@@ -8,43 +8,89 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_selection import SelectKBest, chi2
 from imblearn.over_sampling import SMOTE
 
+def form(data):
+    st.markdown("### 🧠 Naive Bayes")
+    st.info("Silakan atur parameter di bawah untuk analisis sentimen.")
+
+    with st.form("nb_form"):
+        st.subheader("🔧 Pengaturan TF-IDF")
+        ngram_range = st.slider("Pilih N-Gram Range", 1, 3, (1, 2))
+        max_features = st.number_input("Jumlah maksimal fitur (TF-IDF)", value=15000, step=1000)
+
+        st.subheader("🧪 Feature Selection")
+        k_best = st.number_input("Jumlah fitur terpilih (SelectKBest)", value=10000, step=500)
+
+        st.subheader("🧬 SMOTE Oversampling")
+        smote_random_state = st.number_input("Random State untuk SMOTE", value=42)
+
+        st.subheader("📊 Split Data")
+        test_size = st.slider("Persentase Data Uji", 0.1, 0.5, 0.2, step=0.05)
+        split_random_state = st.number_input("Random State Split", value=42)
+
+        st.subheader("⚙️ Parameter GridSearchCV")
+        alphas = st.multiselect("Alpha (Smoothing)", [0.01, 0.03, 0.05, 0.1, 0.5, 1.0], default=[0.01, 0.1])
+
+        submitted = st.form_submit_button("✅ Simpan & Jalankan")
+
+        if submitted:
+            st.session_state.nb_settings = {
+                "ngram_range": ngram_range,
+                "max_features": max_features,
+                "k_best": k_best,
+                "smote_random_state": smote_random_state,
+                "test_size": test_size,
+                "split_random_state": split_random_state,
+                "alpha": alphas
+            }
+            st.success("✅ Parameter disimpan. Silakan jalankan algoritma.")
+
+
 def algoritm(df, text_col, label_col):
+    settings = st.session_state.get("nb_settings", None)
+
+    if not settings:
+        st.warning("⚠️ Silakan isi dan simpan parameter terlebih dahulu di form Naive Bayes.")
+        return
+
     with st.spinner("🔄 Sedang melakukan pelatihan Naive Bayes..."):
         df[text_col] = df[text_col].astype(str)
-
         y = df[label_col]
         le = LabelEncoder()
         y_encoded = le.fit_transform(y)
 
-        # 🔧 TF-IDF Stabil
+        # TF-IDF
         vectorizer = TfidfVectorizer(
-            ngram_range=(1, 2),
-            max_features=15000,
+            ngram_range=settings["ngram_range"],
+            max_features=settings["max_features"],
             min_df=2,
             sublinear_tf=True
         )
         X = vectorizer.fit_transform(df[text_col])
 
-        # 🔧 Select best 10000 fitur
-        X_selected = SelectKBest(chi2, k=10000).fit_transform(X, y_encoded)
+        # SelectKBest
+        X_selected = SelectKBest(chi2, k=settings["k_best"]).fit_transform(X, y_encoded)
 
-        # 🔧 Resample
-        smote = SMOTE(random_state=42)
+        # SMOTE
+        smote = SMOTE(random_state=settings["smote_random_state"])
         X_resampled, y_resampled = smote.fit_resample(X_selected, y_encoded)
 
         # Split
         X_train, X_test, y_train, y_test = train_test_split(
-            X_resampled, y_resampled, test_size=0.2, stratify=y_resampled, random_state=42
+            X_resampled, y_resampled,
+            test_size=settings["test_size"],
+            stratify=y_resampled,
+            random_state=settings["split_random_state"]
         )
 
-        # Grid search stabil
-        param_grid = {'alpha': [0.01, 0.03, 0.05, 0.1]}
+        # GridSearchCV
+        param_grid = {'alpha': settings["alpha"]}
         grid = GridSearchCV(MultinomialNB(), param_grid, cv=5, scoring='accuracy')
         grid.fit(X_train, y_train)
 
         model = grid.best_estimator_
         y_pred = model.predict(X_test)
 
+        # Report & hasil
         report_df = pd.DataFrame(classification_report(y_test, y_pred, output_dict=True)).transpose()
         cm_df = pd.DataFrame(
             confusion_matrix(y_test, y_pred),

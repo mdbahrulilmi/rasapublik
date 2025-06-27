@@ -61,6 +61,8 @@ def method(data, selected_column):
                 return rule_based_label(str(row[selected_column]), positive_input, negative_input)
 
         df['label'] = df.apply(apply_label, axis=1)
+        df = df.iloc[:, -2:]
+        df.columns = ['text', 'label']
 
         st.session_state["rulebased_labeled"] = df
         label_counts = df["label"].value_counts()
@@ -76,6 +78,6 @@ def method(data, selected_column):
         st.download_button(
             label="⬇️ Download hasil labeling",
             data=csv,
-            file_name="hasil_labeling.csv",
+            file_name="hasil_rulebased.csv",
             mime="text/csv"
         )

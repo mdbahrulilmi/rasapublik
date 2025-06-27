@@ -9,11 +9,11 @@ def option():
     
     filtering_basic = st.sidebar.expander(" Bersih Data Ringan",expanded=True)
     filtering_advanced = st.sidebar.expander("Bersih Data Lanjutan")
-    filtering_sampling = st.sidebar.expander("Sampling")    
+    # filtering_sampling = st.sidebar.expander("Sampling")    
 
     with filtering_basic:
         filtering_advanced.expanded == False
-        filtering_sampling.expanded == False
+        # filtering_sampling.expanded == False
         missingvalues_checkbox = st.checkbox("Hapus nilai hilang")
         casefolding_checkbox = st.checkbox("Ubah ke huruf kecil")
         cleansing_checkbox = st.checkbox("Hapus karakter khusus")
@@ -21,14 +21,14 @@ def option():
 
     with filtering_advanced:
         filtering_basic.expanded == False
-        filtering_sampling.expanded == False
+        # filtering_sampling.expanded == False
         stopwordremoval_checkbox = st.checkbox("Hapus kata stopword")
         convertEmoticon_checkbox = st.checkbox("Hapus emotikon")
         convertNegation_checkbox = st.checkbox("Atur negasi")
         tokenisasi_checkbox = st.checkbox("Tokenisasi teks")
     
-    with filtering_sampling:
-        undersampling_checkbox = st.checkbox("Undersampling")
+    # with filtering_sampling:
+    #     undersampling_checkbox = st.checkbox("Undersampling")
     if (
         not missingvalues_checkbox and not
         casefolding_checkbox and not
@@ -36,8 +36,8 @@ def option():
         stopwordremoval_checkbox and not
         convertEmoticon_checkbox and not
         convertNegation_checkbox and not
-        tokenisasi_checkbox and not
-        undersampling_checkbox
+        tokenisasi_checkbox
+        # undersampling_checkbox
         ):
         if "filtered_data" in st.session_state:
             del st.session_state["filtered_data"]
@@ -65,8 +65,8 @@ def option():
     if convertNegation_checkbox:
         data = convert_negation.option(data)
 
-    if undersampling_checkbox:
-        data = undersampling.option(data)
+    # if undersampling_checkbox:
+    #     data = undersampling.option(data)
         
     if selected_column:
         if stopwordremoval_checkbox:
