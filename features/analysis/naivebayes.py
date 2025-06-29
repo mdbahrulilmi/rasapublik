@@ -46,51 +46,48 @@ def form(data):
 
 
 def algoritm(df, text_col, label_col):
-    settings = st.session_state.get("nb_settings", None)
-
-    if not settings:
-        st.warning("⚠️ Silakan isi dan simpan parameter terlebih dahulu di form Naive Bayes.")
+    if "nb_settings" not in st.session_state:
+        st.warning("⚠️ Silakan isi dan simpan parameter terlebih dahulu.")
         return
 
-    with st.spinner("🔄 Sedang melakukan pelatihan Naive Bayes..."):
+    settings = st.session_state.nb_settings
+
+    with st.spinner("🔄 Sedang melakukan analisis sentimen dengan Naive Bayes..."):
         df[text_col] = df[text_col].astype(str)
         y = df[label_col]
         le = LabelEncoder()
         y_encoded = le.fit_transform(y)
 
-        # TF-IDF
-        vectorizer = TfidfVectorizer(
+        tfidf = TfidfVectorizer(
             ngram_range=settings["ngram_range"],
             max_features=settings["max_features"],
             min_df=2,
             sublinear_tf=True
         )
-        X = vectorizer.fit_transform(df[text_col])
+        X = tfidf.fit_transform(df[text_col])
 
-        # SelectKBest
-        X_selected = SelectKBest(chi2, k=settings["k_best"]).fit_transform(X, y_encoded)
+        selector = SelectKBest(chi2, k=settings["k_best"])
+        X_selected = selector.fit_transform(X, y_encoded)
 
-        # SMOTE
         smote = SMOTE(random_state=settings["smote_random_state"])
         X_resampled, y_resampled = smote.fit_resample(X_selected, y_encoded)
 
-        # Split
         X_train, X_test, y_train, y_test = train_test_split(
             X_resampled, y_resampled,
             test_size=settings["test_size"],
-            stratify=y_resampled,
-            random_state=settings["split_random_state"]
+            random_state=settings["split_random_state"],
+            stratify=y_resampled
         )
 
-        # GridSearchCV
         param_grid = {'alpha': settings["alpha"]}
-        grid = GridSearchCV(MultinomialNB(), param_grid, cv=5, scoring='accuracy')
+        grid = GridSearchCV(MultinomialNB(), param_grid, cv=5, scoring='accuracy', n_jobs=-1)
         grid.fit(X_train, y_train)
 
+        best_params = grid.best_params_
         model = grid.best_estimator_
+
         y_pred = model.predict(X_test)
 
-        # Report & hasil
         report_df = pd.DataFrame(classification_report(y_test, y_pred, output_dict=True)).transpose()
         cm_df = pd.DataFrame(
             confusion_matrix(y_test, y_pred),
@@ -102,11 +99,16 @@ def algoritm(df, text_col, label_col):
             'predicted_label': le.inverse_transform(y_pred)
         })
 
+        # ✅ Simpan ke session_state agar bisa dipakai di tab prediksi/visualisasi
         st.session_state.visualisasi = {
             "classification_report": report_df,
             "confusion_matrix": cm_df,
             "hasil_prediksi": result_df,
-            "best_params": grid.best_params_
+            "best_params": best_params
         }
+        st.session_state.trained_model = model
+        st.session_state.vectorizer = tfidf
+        st.session_state.label_encoder = le
+        st.session_state.select_kbest = selector
 
-    st.success("✅ Naive Bayes selesai! Silakan buka tab *Visualisasi* untuk melihat hasil.")
+    st.success("✅ Analisis selesai! Silakan cek tab *Visualisasi* untuk melihat hasil.")

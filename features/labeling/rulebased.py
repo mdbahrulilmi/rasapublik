@@ -71,9 +71,7 @@ def method(data, selected_column):
         st.write(f"✅ Positif: {label_counts.get('positif', 0)}")
         st.write(f"❌ Negatif: {label_counts.get('negatif', 0)}")
         st.write(f"➖ Netral : {label_counts.get('netral', 0)}")
-
-        st.dataframe(df.head())
-
+        
         csv = df.to_csv(index=False)
         st.download_button(
             label="⬇️ Download hasil labeling",

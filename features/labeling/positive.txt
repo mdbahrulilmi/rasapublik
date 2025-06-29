@@ -82,7 +82,6 @@ ceria
 tenang
 adem
 lancar
-niat baik
 akhlak mulia
 tangguh
 kuat
@@ -92,7 +91,6 @@ tulus
 andal
 cepat selesai
 tidak ribet
-efisien
 cekatan
 ramah sekali
 humble
@@ -118,7 +116,6 @@ satisfying
 excellent
 brilliant
 trustful
-
 valuable
 great
 amazing
@@ -152,13 +149,13 @@ good job
 senang banget
 terima kasih banyak
 appreciate
-best service
-very helpful
+best_service
+very_helpful
 comfort
 ontime
 fair price
-suka sekali
-sangat puas
+suka_sekali
+sangat_puas
 menyenangkan sekali
 pelayanannya bagus
 keren banget
@@ -168,11 +165,6 @@ disukai
 disenangi
 menyentuh
 memikat
-mudah diakses
-proses cepat
-pelayanan ramah
-dilayani dengan baik
-murah tapi berkualitas
 memudahkan
 hasil maksimal
 tanpa cela
@@ -191,7 +183,6 @@ vibes positif
 pelayanan top
 hasil oke
 sangat recommended
-tidak mengecewakan
 tidak ribet sama sekali
 praktis
 senang rasanya
@@ -204,4 +195,15 @@ dibantu
 di_bantu
 satset
 baik
-bersyukur
+berjanji
+mengapresiasi
+berhasil
+keberhasilan
+tegas
+terukur
+pengalaman
+respon cepat
+bantu
+humanis
+solid
+gratis

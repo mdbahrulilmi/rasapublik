@@ -36,7 +36,6 @@ dijambret
 maling
 pencuri
 amarah
-dendam
 perampok
 pembunuh
 diskriminasi
@@ -110,9 +109,7 @@ disalahkan
 memalukan
 kesalahan
 ketakutan
-dikhianati
 kelemahan
-dendam
 pelanggaran
 kerusuhan
 terhina
@@ -127,13 +124,10 @@ kekurangan
 kelaparan
 kesulitan
 merugikan
-menyiksa
 dicaci
-kecewaan
 celaan
 ejekan
 cemoohan
-hina
 salahkan
 pelaku
 merendahkan
@@ -154,6 +148,7 @@ tersesat
 tak_layak
 tersiksa
 ancaman
+dianggap_ancaman
 menyudutkan
 menyebar_fitnah
 menzalimi
@@ -168,7 +163,6 @@ emosi
 menyerang
 tamparan
 cercaan
-diam_saja
 menjengkelkan
 menyakitkan
 pengkhianatan
@@ -205,3 +199,16 @@ diperas
 di_paksa
 dipaksa
 pemaksaan
+tidak_suka
+tidak_bagus
+tidak_baik
+stres
+stress
+arogan
+malas
+bayar
+pungli
+penipuan
+copet
+arogansi
+dendam

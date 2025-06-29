@@ -13,9 +13,11 @@ def option(data, selected_column):
     new_data_with_labels = []
 
     for i in range(start_index, end_index):
-        col1, col2 = st.columns([0.7, 0.3], gap="medium")
-
+        col1, col2, col3 = st.columns([0.1, 0.7, 0.2], gap="medium")
+        
         with col1:
+            st.write(i+1)
+        with col2:
             text = data[selected_column].iloc[i]
             current_label = ""
 
@@ -31,7 +33,7 @@ def option(data, selected_column):
 
         default_index = label_options.index(current_label) if current_label in label_options else 1
 
-        with col2:
+        with col3:
             option = st.selectbox(
                 label=f"Label untuk data ke-{i}",
                 label_visibility="collapsed",
@@ -47,8 +49,7 @@ def option(data, selected_column):
             "label": label,
             "index": i
         })
-
-    # Buat salinan data untuk ditandai
+        
     data_labeled = data.copy()
     if 'label' not in data_labeled.columns:
         data_labeled['label'] = ""
