@@ -2,6 +2,9 @@
 
 **Rasa Publik** is a web-based sentiment analysis application that captures and analyzes public opinion toward law enforcement in Indonesia. Users can input data via web scraping, file upload, or direct text, and the app performs sentiment analysis followed by data visualization.
 
+## 🔍 Preview
+![Preview App](preview.PNG)
+
 ## 📌 Features
 
 - 📝 **Flexible Input**: Upload text/CSV files or scrape data from the web.

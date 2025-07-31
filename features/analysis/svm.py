@@ -28,9 +28,8 @@ def form(data):
         split_random_state = st.number_input("Random State Split", value=42)
 
         st.subheader("⚙️ Parameter GridSearchCV")
-        c_values = st.multiselect("C (Regulasi)", [0.1, 1, 10], default=[1, 10])
-        kernels = st.multiselect("Kernel", ['linear', 'rbf', 'poly'], default=['linear', 'rbf'])
-        gammas = st.multiselect("Gamma", ['scale', 'auto'], default=['scale'])
+        c_values = st.multiselect("C (Regulasi)", [0.01, 0.1, 1, 10, 100], default=[1, 10])
+        kernel = st.selectbox("Kernel SVM", ["linear", "rbf", "poly", "sigmoid"], index=0)
 
         submitted = st.form_submit_button("✅ Simpan & Jalankan")
 
@@ -43,8 +42,7 @@ def form(data):
                 "test_size": test_size,
                 "split_random_state": split_random_state,
                 "C": c_values,
-                "kernel": kernels,
-                "gamma": gammas
+                "kernel": kernel
             }
             st.success("✅ Parameter disimpan. Silakan jalankan algoritma.")
 
@@ -55,22 +53,28 @@ def algoritm(df, text_col, label_col):
 
     settings = st.session_state.svm_settings
 
-    with st.spinner("🔄 Sedang melakukan analisis sentimen dengan SVM..."):
+    with st.spinner("🔄 Sedang melakukan analisis sentimen dengan SVC..."):
+        # Encode label
         y = df[label_col]
         le = LabelEncoder()
         y_encoded = le.fit_transform(y)
 
+        # TF-IDF
         tfidf = TfidfVectorizer(
             ngram_range=settings["ngram_range"],
             max_features=settings["max_features"]
         )
         X = tfidf.fit_transform(df[text_col])
+
+        # Feature Selection
         selector = SelectKBest(chi2, k=settings["k_best"])
         X_selected = selector.fit_transform(X, y_encoded)
 
+        # SMOTE
         smote = SMOTE(random_state=settings["smote_random_state"])
         X_resampled, y_resampled = smote.fit_resample(X_selected, y_encoded)
 
+        # Split Data
         X_train, X_test, y_train, y_test = train_test_split(
             X_resampled, y_resampled,
             test_size=settings["test_size"],
@@ -78,22 +82,29 @@ def algoritm(df, text_col, label_col):
             stratify=y_resampled
         )
 
-        params = {
+        # Grid Search
+        param_grid = {
             'C': settings["C"],
-            'kernel': settings["kernel"],
-            'gamma': settings["gamma"]
+            'kernel': [settings["kernel"]]
         }
-
         cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-        grid = GridSearchCV(SVC(), params, cv=cv, scoring='accuracy', n_jobs=-1)
+        grid = GridSearchCV(
+            SVC(),
+            param_grid,
+            cv=cv,
+            scoring='accuracy',
+            n_jobs=-1
+        )
         grid.fit(X_train, y_train)
 
         best_params = grid.best_params_
+
+        # Final Model
         model = SVC(**best_params)
         model.fit(X_train, y_train)
-
         y_pred = model.predict(X_test)
 
+        # Metrics
         report_df = pd.DataFrame(classification_report(y_test, y_pred, output_dict=True)).transpose()
         cm_df = pd.DataFrame(
             confusion_matrix(y_test, y_pred),
@@ -105,7 +116,7 @@ def algoritm(df, text_col, label_col):
             'predicted_label': le.inverse_transform(y_pred)
         })
 
-        # ✅ Simpan ke session_state agar bisa dipakai di tab prediksi
+        # Save to session
         st.session_state.visualisasi = {
             "classification_report": report_df,
             "confusion_matrix": cm_df,
@@ -116,6 +127,5 @@ def algoritm(df, text_col, label_col):
         st.session_state.vectorizer = tfidf
         st.session_state.label_encoder = le
         st.session_state.select_kbest = selector
-
 
     st.success("✅ Analisis selesai! Silakan cek tab *Visualisasi* untuk melihat hasil.")
